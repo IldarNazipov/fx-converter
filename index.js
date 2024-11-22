@@ -21,7 +21,7 @@ const feeInput = document.getElementById('feeInput');
 
 // Функция для получения курса с FX платформы
 const fetchExchangeRate = async () => {
-  const url = "https://m.bcc.kz/mb/!pkg_w_mb_main.operation?action=GET_RATE";
+  const url = 'http://91.184.243.228:3000/get-fx/mb/!pkg_w_mb_main.operation?action=GET_RATE';
   try {
     const response = await fetch(url);
       
