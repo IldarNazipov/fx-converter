@@ -21,7 +21,7 @@ const feeInput = document.getElementById('feeInput');
 
 // Функция для получения курса с FX платформы
 const fetchExchangeRate = async () => {
-  const url = 'http://91.184.243.228:3000/get-fx/mb/!pkg_w_mb_main.operation?action=GET_RATE';
+  const url = 'http://91.184.243.228:3000/api?action=GET_RATE';
   try {
     const response = await fetch(url);
       
@@ -125,8 +125,13 @@ form.addEventListener('submit', async (e) => {
   const result = state.isKzt
     ? await calculateRate(curInput, curInputType, bankFee, usdKztRate, kztRubRate, 'kzt', feeSum)
     : await calculateRate(curInput, curInputType, bankFee, usdRubRate, kztRubRate, 'rub', feeSum);
-  rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(2)}`;
-  sumResultEl.textContent = `Сумма в рублях: ${result.toFixed(2)}`;
+  if (isNaN(result)) {
+    rateResultEl.textContent = 'Что-то пошло не так.';
+    sumResultEl.textContent = 'Проверьте параметры запроса.';
+  } else {
+    rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(2)}`;
+    sumResultEl.textContent = `Сумма в рублях: ${result.toFixed(2)}`;
+  }
 });
 
 feeCheckbox.addEventListener('change', (e) => {
