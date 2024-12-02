@@ -75,7 +75,7 @@ const calculateRate = async (curInput, curInputType, bankFee, usdRate, kztRubRat
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
       const data = await response.json();
-      const result = parseFloat(data.reverseAmount).toFixed(2);
+      const result = parseFloat(data.reverseAmount.replace(/,/g, '')).toFixed(2);
       return result;
     } catch (error) {
       console.log(error);
@@ -130,7 +130,7 @@ form.addEventListener('submit', async (e) => {
     rateResultEl.textContent = 'Что-то пошло не так.';
     sumResultEl.textContent = 'Проверьте параметры запроса.';
   } else {
-    rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(2)}`;
+    rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(6)}`;
     sumResultEl.textContent = `Сумма в рублях: ${result.toFixed(2)}`;
   }
 });
