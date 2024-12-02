@@ -21,7 +21,7 @@ const feeInput = document.getElementById('feeInput');
 
 // Функция для получения курса с FX платформы
 const fetchExchangeRate = async () => {
-  const url = 'http://91.184.243.228:3000/api?action=GET_RATE';
+  const url = 'https://bydlorita.fun:3000/api?action=GET_RATE';
   try {
     const response = await fetch(url);
       
@@ -64,6 +64,7 @@ const calculateRate = async (curInput, curInputType, bankFee, usdRate, kztRubRat
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
+      timeZone: 'America/New_York'
     });
     const currentDate = formatter.format(date);
     const url = `https://usa.visa.com/cmsapi/fx/rates?amount=${curInput}&fee=${bankFee}&utcConvertedDate=${currentDate}&exchangedate=${currentDate}&fromCurr=USD&toCurr=${curInputType}`;
@@ -115,7 +116,7 @@ form.addEventListener('submit', async (e) => {
   sumResultEl.textContent = 'Пожалуйста, подождите...';
   const formData = new FormData(e.target);
   const curInput = +formData.get('curInput');
-  const curInputType = formData.get('curInputType').toUpperCase();
+  const curSelectType = document.querySelector('#curSelectType').value;
   const bankFee = +formData.get('bankFee');
   const usdRubRate = +formData.get('usdRubRate');
   const usdKztRate = +formData.get('usdKztRate');
@@ -123,8 +124,8 @@ form.addEventListener('submit', async (e) => {
   const feeInput = +formData.get('feeInput');
   const feeSum = select.value === 'fix' ? feeInput : feeInput * curInput / 100;
   const result = state.isKzt
-    ? await calculateRate(curInput, curInputType, bankFee, usdKztRate, kztRubRate, 'kzt', feeSum)
-    : await calculateRate(curInput, curInputType, bankFee, usdRubRate, kztRubRate, 'rub', feeSum);
+    ? await calculateRate(curInput, curSelectType, bankFee, usdKztRate, kztRubRate, 'kzt', feeSum)
+    : await calculateRate(curInput, curSelectType, bankFee, usdRubRate, kztRubRate, 'rub', feeSum);
   if (isNaN(result)) {
     rateResultEl.textContent = 'Что-то пошло не так.';
     sumResultEl.textContent = 'Проверьте параметры запроса.';
