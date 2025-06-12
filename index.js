@@ -3,7 +3,7 @@ const state = {
   isFee: false,
   rubToUsd: 0,
   usdToKzt: 0,
-  rubToKzt: 0
+  rubToKzt: 0,
 };
 
 // Элементы
@@ -21,10 +21,10 @@ const feeInput = document.getElementById('feeInput');
 
 // Функция для получения курса с FX платформы
 const fetchExchangeRate = async () => {
-  const url = 'https://bydlorita.fun:3000/api?action=GET_RATE';
+  const url = 'http://216.9.225.204:3000/api/rate';
   try {
     const response = await fetch(url);
-      
+
     if (!response.ok) {
       throw new Error(`Ошибка HTTP: ${response.status}`);
     }
@@ -33,13 +33,13 @@ const fetchExchangeRate = async () => {
     const rates = data.reason.rates;
 
     const rubToUsdObj = rates.find(
-      rate => rate.currency_sell === "USD" && rate.currency_buy === "RUB"
+      (rate) => rate.currency_sell === 'USD' && rate.currency_buy === 'RUB'
     );
     const usdToKztObj = rates.find(
-      rate => rate.currency_sell === "USD" && rate.currency_buy === "KZT"
+      (rate) => rate.currency_sell === 'USD' && rate.currency_buy === 'KZT'
     );
     const rubToKztObj = rates.find(
-      rate => rate.currency_sell === "RUB" && rate.currency_buy === "KZT"
+      (rate) => rate.currency_sell === 'RUB' && rate.currency_buy === 'KZT'
     );
 
     state.rubToUsd = rubToUsdObj.sell;
@@ -48,45 +48,59 @@ const fetchExchangeRate = async () => {
 
     if (state.rubToUsd !== 0) {
       usdRubInput.value = state.rubToUsd;
-    };
+    }
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 fetchExchangeRate();
 
 // Функция расчета курса
-const calculateRate = async (curInput, curInputType, bankFee, usdRate, kztRubRate, outputCurrency, feeSum) => {
+const calculateRate = async (
+  curInput,
+  curInputType,
+  bankFee,
+  usdRate,
+  kztRubRate,
+  outputCurrency,
+  feeSum
+) => {
   const fetchVisaExchangeRate = async (curInput, curInputType, bankFee) => {
     const date = new Date();
     const formatter = new Intl.DateTimeFormat('en-US', {
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
-      timeZone: 'America/New_York'
+      timeZone: 'America/New_York',
     });
     const currentDate = formatter.format(date);
     const url = `https://usa.visa.com/cmsapi/fx/rates?amount=${curInput}&fee=${bankFee}&utcConvertedDate=${currentDate}&exchangedate=${currentDate}&fromCurr=USD&toCurr=${curInputType}`;
     try {
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
       const data = await response.json();
-      const result = parseFloat(data.reverseAmount.replace(/,/g, '')).toFixed(2);
+      const result = parseFloat(data.reverseAmount.replace(/,/g, '')).toFixed(
+        2
+      );
       return result;
     } catch (error) {
       console.log(error);
-    };
+    }
   };
 
-  const usdCurRate = await fetchVisaExchangeRate(curInput, curInputType, bankFee);
-  
+  const usdCurRate = await fetchVisaExchangeRate(
+    curInput,
+    curInputType,
+    bankFee
+  );
+
   let curWithCommission;
   if (state.isFee) {
-    curWithCommission = curInput + feeSum; 
+    curWithCommission = curInput + feeSum;
   } else {
     curWithCommission = curInput;
   }
@@ -107,7 +121,6 @@ const calculateRate = async (curInput, curInputType, bankFee, usdRate, kztRubRat
   return result;
 };
 
-
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const rateResultEl = document.querySelector('#result');
@@ -122,15 +135,34 @@ form.addEventListener('submit', async (e) => {
   const usdKztRate = +formData.get('usdKztRate');
   const kztRubRate = +formData.get('kztRubRate');
   const feeInput = +formData.get('feeInput');
-  const feeSum = select.value === 'fix' ? feeInput : feeInput * curInput / 100;
+  const feeSum =
+    select.value === 'fix' ? feeInput : (feeInput * curInput) / 100;
   const result = state.isKzt
-    ? await calculateRate(curInput, curSelectType, bankFee, usdKztRate, kztRubRate, 'kzt', feeSum)
-    : await calculateRate(curInput, curSelectType, bankFee, usdRubRate, kztRubRate, 'rub', feeSum);
+    ? await calculateRate(
+        curInput,
+        curSelectType,
+        bankFee,
+        usdKztRate,
+        kztRubRate,
+        'kzt',
+        feeSum
+      )
+    : await calculateRate(
+        curInput,
+        curSelectType,
+        bankFee,
+        usdRubRate,
+        kztRubRate,
+        'rub',
+        feeSum
+      );
   if (isNaN(result)) {
     rateResultEl.textContent = 'Что-то пошло не так.';
     sumResultEl.textContent = 'Проверьте параметры запроса.';
   } else {
-    rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(6)}`;
+    rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(
+      6
+    )}`;
     sumResultEl.textContent = `Сумма в рублях: ${result.toFixed(2)}`;
   }
 });
@@ -157,7 +189,7 @@ kztCheckbox.addEventListener('change', (e) => {
     usdKztInput.setAttribute('required', '');
     kztRubDiv.style.display = 'block';
     kztRubInput.setAttribute('required', '');
-    if (state.usdToKzt !== 0 && state.rubToKzt !==0) {
+    if (state.usdToKzt !== 0 && state.rubToKzt !== 0) {
       usdKztInput.value = state.usdToKzt;
       kztRubInput.value = state.rubToKzt;
     }
