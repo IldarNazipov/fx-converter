@@ -183,6 +183,7 @@ const select = document.getElementById('select-addon');
 const feeCheckbox = document.getElementById('feeCheckbox');
 const feeDiv = document.querySelector('.fee');
 const feeInput = document.getElementById('feeInput');
+const button = document.querySelector('button');
 
 // Функция для получения курса с FX платформы
 const getExchangeRates = (rates) =>
@@ -306,6 +307,7 @@ const calculateRate = async (
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  button.disabled = true;
   const rateResultEl = document.querySelector('#result');
   const sumResultEl = document.querySelector('#result-2');
   rateResultEl.textContent = '';
@@ -341,9 +343,11 @@ form.addEventListener('submit', async (e) => {
       );
 
   if (isNaN(result)) {
+    button.disabled = false;
     rateResultEl.textContent = 'Что-то пошло не так.';
     sumResultEl.textContent = state.error;
   } else {
+    button.disabled = false;
     rateResultEl.textContent = `Курс к рублю: ${(result / curInput).toFixed(
       6
     )}`;
