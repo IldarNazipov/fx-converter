@@ -21,7 +21,7 @@ const feeInput = document.getElementById('feeInput');
 
 // Функция для получения курса с FX платформы
 const fetchExchangeRate = async () => {
-  const url = 'http://216.9.225.204:3000/api/rate';
+  const url = 'https://api.bydlorita.fun/api/rate';
   try {
     const response = await fetch(url);
 
