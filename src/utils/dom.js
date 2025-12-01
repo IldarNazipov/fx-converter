@@ -1,0 +1,15 @@
+export const domElements = {
+  usdRubInput: document.getElementById('usdRubRate'),
+  usdRubDiv: document.querySelector('.usd-rub'),
+  usdKztDiv: document.querySelector('.usd-kzt'),
+  usdKztInput: document.getElementById('usdKztRate'),
+  kztRubDiv: document.querySelector('.kzt-rub'),
+  kztRubInput: document.getElementById('kztRubRate'),
+  form: document.getElementById('conversionForm'),
+  select: document.getElementById('select-addon'),
+  feeCheckbox: document.getElementById('feeCheckbox'),
+  feeDiv: document.querySelector('.fee'),
+  feeInput: document.getElementById('feeInput'),
+  button: document.querySelector('button'),
+  kztCheckbox: document.getElementById('kztCheckbox'),
+};
