@@ -1,5 +1,5 @@
 import { state } from '../config/state.js';
-import { domElements } from '../utils/dom.js';
+import { domElements } from '../utils/domElements.js';
 
 export function initKztMode() {
   domElements.kztCheckbox.addEventListener('change', (e) => {

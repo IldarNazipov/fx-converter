@@ -1,5 +1,5 @@
 import { calculateRate } from '../utils/calculateRate.js';
-import { domElements } from '../utils/dom.js';
+import { domElements } from '../utils/domElements.js';
 import { state } from '../config/state.js';
 
 export function initFormHandler() {

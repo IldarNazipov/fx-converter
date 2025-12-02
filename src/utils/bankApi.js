@@ -16,7 +16,7 @@ const getExchangeRates = (rates) =>
 
 export async function fetchExchangeRate() {
   try {
-    const response = await fetch('https://api.bydlorita.fun/api/rate');
+    const response = await fetch('https://api.ildarito.com.ru/api/rate');
     const data = await response.json();
     const rates = data.reason?.rates;
 

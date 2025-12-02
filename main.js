@@ -3,7 +3,7 @@ import { initFeeToggle } from './src/components/fee.js';
 import { initKztMode } from './src/components/kztMode.js';
 import { initFormHandler } from './src/handlers/formHandler.js';
 import { fetchExchangeRate } from './src/utils/bankApi.js';
-import { domElements } from './src/utils/dom.js';
+import { domElements } from './src/utils/domElements.js';
 import { state } from './src/config/state.js';
 
 (async () => {
