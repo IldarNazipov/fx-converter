@@ -12,6 +12,8 @@ import { state } from './src/config/state.js';
   initKztMode();
   initFormHandler();
 
+  document.body.style.visibility = 'visible';
+
   await fetchExchangeRate();
 
   if (state.rubToUsd) {
